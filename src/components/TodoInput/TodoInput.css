@@ -1,0 +1,15 @@
+.todoInput {
+    background-color: rgb(27,112,137);
+    border: 0;
+    width: 600px;
+    height: 50px;
+    padding: 0 20px;
+    margin: 100px 0 0 0;
+    font-size: 18px;
+    border-radius: 10px;
+    color: #fff;
+}
+
+.todoInput::placeholder {
+    color: rgba(255,255,255,0.5);
+}

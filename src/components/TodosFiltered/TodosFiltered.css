@@ -1,0 +1,18 @@
+button {
+    font-size: 14px;
+    background-color: white;
+    appearance: none;
+    margin: 2px;
+}
+
+button:hover {
+    background: #bf07ac;
+}
+
+button:focus {
+    outline: none;
+}
+
+.active {
+    background: #bf07ac;
+}
