@@ -12,14 +12,13 @@
     "allowSyntheticDefaultImports": true,
     "strict": true,
     "forceConsistentCasingInFileNames": true,
+    "experimentalDecorators": true,
     "module": "esnext",
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react",
-    "experimentalDecorators": true,
-    "noImplicitAny": false,
+    "jsx": "react"
   },
   "include": [
     "src"

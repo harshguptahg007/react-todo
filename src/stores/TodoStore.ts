@@ -1,35 +1,22 @@
-import {action, computed, observable} from "mobx";
+import {action, computed, observable, runInAction} from "mobx";
 import {TodoModel} from "../model/TodoModel";
 import React from 'react';
-import {todosRef} from "../firebase";
+import {addTodo,deleteTodo,updateTodo,getFirebaseTodos} from '../firebase';
 
 export class TodoStore {
     private static _instance: TodoStore;
     @observable todoList: TodoModel[];
-    @observable idForNextTodo: number;
     @observable filter: string;
     @observable todoInput: any;
+    @observable isLoading: boolean;
     @observable beforeEditCache: string;
 
     constructor() {
-        this.todoList = [
-            {
-                id: 1,
-                title: 'MOBX 1 data',
-                isComplete: false,
-                isEditing: false,
-            },
-            {
-                id: 2,
-                title: 'MOBX 2 data',
-                isComplete: false,
-                isEditing: false,
-            },
-        ];
-        this.idForNextTodo = 3;
+        this.todoList = [];
         this.filter = 'all';
         this.todoInput = React.createRef();
         this.beforeEditCache='';
+        this.isLoading = false;
     }
 
     static getInstance(): TodoStore {
@@ -40,13 +27,7 @@ export class TodoStore {
         return this._instance;
     }
 
-    @action fetchTodos = async () => {
-        todosRef.on("value",snapshot => {
-            console.log(snapshot);
-        })
-    };
-
-    @action addTodo = async (event) => {
+    @action addTodo = async (event: any) => {
         if (event.key === 'Enter') {
             const todoInput = event.target.value;
 
@@ -54,39 +35,36 @@ export class TodoStore {
                 return;
             }
 
-            const obj = new TodoModel();
-            obj.id = this.idForNextTodo;
+            let obj = new TodoModel();
             obj.title = todoInput;
             obj.isComplete = false;
             obj.isEditing = false;
 
-            await todosRef.push().set(obj);
-
+            obj = await addTodo(obj);
             this.todoList.push(obj);
-
-            this.idForNextTodo++;
             this.todoInput.current.value='';
         }
     };
 
-    @action deleteTodo = async (id) => {
+    @action deleteTodo = async (id: string) => {
         const index = this.todoList.findIndex(item => item.id === id);
-
-        // await todosRef.child(this.todoList[index]).remove();
-
+        await deleteTodo(id);
         this.todoList.splice(index, 1);
 
     };
 
-    @action checkTodo = (todo) => {
+    @action checkTodo = async (todo: TodoModel) => {
         const index = this.todoList.findIndex(item => item.id === todo.id);
         todo.isComplete = !todo.isComplete;
-
+        await updateTodo(todo);
         this.todoList.splice(index, 1, todo);
     };
 
-    @action checkAllTodos = (event) => {
-        this.todoList.forEach((todo) => todo.isComplete = event.target.checked);
+    @action checkAllTodos = (event: any) => {
+        this.todoList.forEach((todo) => {
+            todo.isComplete = event.target.checked;
+            updateTodo(todo);
+        });
     };
 
     @computed get remaining() {
@@ -105,7 +83,7 @@ export class TodoStore {
         this.todoList = this.todoList.filter(todo => !todo.isComplete);
     };
 
-    @action updateFilter = (filter) => {
+    @action updateFilter = (filter: string) => {
         this.filter = filter;
     };
 
@@ -125,11 +103,10 @@ export class TodoStore {
         const index = this.todoList.findIndex(item => item.id === todo.id);
         todo.isEditing = true;
         this.beforeEditCache = todo.title;
-
         this.todoList.splice(index, 1, todo);
     };
 
-    @action doneEdit = (todo: TodoModel, event) => {
+    @action doneEdit = async (todo: TodoModel, event: any) => {
         const index = this.todoList.findIndex(item => item.id === todo.id);
         todo.isEditing = false;
 
@@ -138,7 +115,7 @@ export class TodoStore {
         } else {
             todo.title = event.target.value;
         }
-
+        await updateTodo(todo);
         this.todoList.splice(index, 1, todo);
     };
 
@@ -149,4 +126,16 @@ export class TodoStore {
 
         this.todoList.splice(index, 1, todo);
     };
+
+    @action async getData() {
+        this.isLoading = true;
+        let todoData: TodoModel[];
+        await getFirebaseTodos().then((data)=>{
+            todoData = data;
+            runInAction(()=>{
+                this.isLoading = false;
+                this.todoList = todoData;
+            });
+        });
+    }
 }

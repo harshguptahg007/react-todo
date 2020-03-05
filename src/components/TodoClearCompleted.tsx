@@ -6,7 +6,7 @@ import {inject, observer} from "mobx-react";
 interface Props extends GlobalProps {
 }
 
-const todoClearCompleted = (props: Props) => {
+const TodoClearCompleted:React.FC<Props> = (props: Props) => {
     const store = props.store!.todo;
 
     return (
@@ -27,4 +27,4 @@ const todoClearCompleted = (props: Props) => {
     );
 };
 
-export default inject('store')(observer(todoClearCompleted));
+export default inject('store')(observer(TodoClearCompleted));

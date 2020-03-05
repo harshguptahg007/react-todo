@@ -6,7 +6,7 @@ import {inject, observer} from "mobx-react";
 interface Props extends GlobalProps {
 }
 
-const todoInput  = (props: Props)=> {
+const TodoInput:React.FC<Props> = (props: Props)=> {
     const store = props.store!.todo;
     return (
         <input
@@ -19,4 +19,4 @@ const todoInput  = (props: Props)=> {
     );
 };
 
-export default inject('store')(observer(todoInput));
+export default inject('store')(observer(TodoInput));

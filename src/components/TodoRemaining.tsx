@@ -5,7 +5,7 @@ import {inject, observer} from "mobx-react";
 interface Props extends GlobalProps {
 }
 
-const todosRemaining = (props: Props) => {
+const TodosRemaining:React.FC<Props> = (props: Props) => {
     const store = props.store!.todo;
     return (
         <div className="item-count">
@@ -14,4 +14,4 @@ const todosRemaining = (props: Props) => {
     );
 };
 
-export default inject('store')(observer(todosRemaining));
+export default inject('store')(observer(TodosRemaining));
