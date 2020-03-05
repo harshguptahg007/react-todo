@@ -1,6 +1,5 @@
 import React from 'react';
 import './App.css';
-import {RouteComponentProps} from "react-router-dom";
 import TodoInput from './components/TodoInput/TodoInput';
 import TodoCheckAll from './components/TodoCheckAll';
 import TodoRemaining from './components/TodoRemaining';
@@ -10,7 +9,7 @@ import TodoList from "./components/TodoList";
 import TodoFiltered from "./components/TodosFiltered/TodosFiltered";
 import TodoClearCompleted from "./components/TodoClearCompleted";
 
-export interface GlobalProps extends RouteComponentProps {
+export interface GlobalProps {
 }
 
 export interface GlobalProps {
