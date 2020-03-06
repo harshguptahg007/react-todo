@@ -1,7 +1,6 @@
-import {action, computed, observable} from "mobx";
+import {action, computed, observable, runInAction} from "mobx";
 import {TodoModel} from "../model/TodoModel";
 import React from 'react';
-import {todosRef} from "../firebase";
 
 export class TodoStore {
     private static _instance: TodoStore;
@@ -10,26 +9,15 @@ export class TodoStore {
     @observable filter: string;
     @observable todoInput: any;
     @observable beforeEditCache: string;
+    @observable isLoading: boolean;
 
     constructor() {
-        this.todoList = [
-            {
-                id: 1,
-                title: 'MOBX 1 data',
-                isComplete: false,
-                isEditing: false,
-            },
-            {
-                id: 2,
-                title: 'MOBX 2 data',
-                isComplete: false,
-                isEditing: false,
-            },
-        ];
-        this.idForNextTodo = 3;
+        this.todoList = [];
+        this.idForNextTodo = 1;
         this.filter = 'all';
         this.todoInput = React.createRef();
-        this.beforeEditCache='';
+        this.beforeEditCache = '';
+        this.isLoading = false;
     }
 
     static getInstance(): TodoStore {
@@ -40,12 +28,6 @@ export class TodoStore {
         return this._instance;
     }
 
-    @action fetchTodos = async () => {
-        todosRef.on("value",snapshot => {
-            console.log(snapshot);
-        })
-    };
-
     @action addTodo = async (event) => {
         if (event.key === 'Enter') {
             const todoInput = event.target.value;
@@ -55,38 +37,46 @@ export class TodoStore {
             }
 
             const obj = new TodoModel();
-            obj.id = this.idForNextTodo;
+            obj.id = this.idForNextTodo.toString();
             obj.title = todoInput;
             obj.isComplete = false;
             obj.isEditing = false;
 
-            await todosRef.push().set(obj);
-
+            let idList = await localStorage.getItem('ids');
+            if (idList) {
+                idList = JSON.parse(idList);
+                idList = idList!.toString();
+                idList += obj.id;
+            } else {
+                idList = obj.id;
+            }
+            await localStorage.setItem('ids', JSON.stringify(idList));
+            await localStorage.setItem(obj.id, JSON.stringify(obj));
             this.todoList.push(obj);
-
             this.idForNextTodo++;
-            this.todoInput.current.value='';
+            this.todoInput.current.value = '';
         }
     };
 
     @action deleteTodo = async (id) => {
         const index = this.todoList.findIndex(item => item.id === id);
-
-        // await todosRef.child(this.todoList[index]).remove();
-
+        await localStorage.removeItem(id);
         this.todoList.splice(index, 1);
 
     };
 
-    @action checkTodo = (todo) => {
+    @action checkTodo = async (todo) => {
         const index = this.todoList.findIndex(item => item.id === todo.id);
         todo.isComplete = !todo.isComplete;
-
+        await localStorage.setItem(todo.id, JSON.stringify(todo));
         this.todoList.splice(index, 1, todo);
     };
 
     @action checkAllTodos = (event) => {
-        this.todoList.forEach((todo) => todo.isComplete = event.target.checked);
+        this.todoList.forEach((todo) => {
+            todo.isComplete = event.target.checked;
+            localStorage.setItem(todo.id, JSON.stringify(todo));
+        });
     };
 
     @computed get remaining() {
@@ -101,8 +91,11 @@ export class TodoStore {
         return this.todoList.filter(todo => todo.isComplete).length;
     };
 
-    @action clearCompleted = () => {
-        this.todoList = this.todoList.filter(todo => !todo.isComplete);
+    @action clearCompleted = async () => {
+        this.todoList = this.todoList.filter(todo => {
+            localStorage.removeItem(!todo.isComplete ? todo.id : '');
+            return !todo.isComplete;
+        });
     };
 
     @action updateFilter = (filter) => {
@@ -129,7 +122,7 @@ export class TodoStore {
         this.todoList.splice(index, 1, todo);
     };
 
-    @action doneEdit = (todo: TodoModel, event) => {
+    @action doneEdit = async (todo: TodoModel, event) => {
         const index = this.todoList.findIndex(item => item.id === todo.id);
         todo.isEditing = false;
 
@@ -138,7 +131,7 @@ export class TodoStore {
         } else {
             todo.title = event.target.value;
         }
-
+        await localStorage.setItem(todo.id, JSON.stringify(todo));
         this.todoList.splice(index, 1, todo);
     };
 
@@ -149,4 +142,25 @@ export class TodoStore {
 
         this.todoList.splice(index, 1, todo);
     };
+
+    @action
+    async getData() {
+        this.isLoading = true;
+        let todoData: TodoModel[] = [];
+        let idList = await localStorage.getItem('ids');
+        if (idList) {
+            idList = JSON.parse(idList);
+            for (let i = 0; i < idList!.length; i++) {
+                const todo = await localStorage.getItem(idList!.charAt(i));
+                if (todo) {
+
+                    todoData.push(JSON.parse(todo));
+                }
+            }
+            runInAction(() => {
+                this.isLoading = false;
+                this.todoList = todoData;
+            });
+        }
+    }
 }

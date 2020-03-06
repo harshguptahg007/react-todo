@@ -10,7 +10,7 @@ interface Props extends GlobalProps {
     todo: TodoModel,
 }
 
-const todoItem = (props: Props) => {
+const TodoItem: React.FC<Props> = (props: Props) => {
     const store = props.store!.todo;
     return (
         <div className="todo-item" key={props.todo.id}>
@@ -56,4 +56,4 @@ const todoItem = (props: Props) => {
     );
 };
 
-export default inject('store')(observer(todoItem));
+export default inject('store')(observer(TodoItem));

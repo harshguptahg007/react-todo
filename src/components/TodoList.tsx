@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {GlobalProps} from "../App";
 import {inject, observer} from "mobx-react";
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
@@ -8,8 +8,12 @@ import '../App.css';
 interface Props extends GlobalProps {
 }
 
-const todoList: any = (props: Props) => {
+const TodoList: React.FC<Props> = (props: Props) => {
     const store = props.store!.todo;
+
+    useEffect(()=>{
+        store.getData();
+    },[store]);
 
     return (
         <div>
@@ -27,4 +31,4 @@ const todoList: any = (props: Props) => {
     );
 };
 
-export default inject('store')(observer(todoList));
+export default inject('store')(observer(TodoList));

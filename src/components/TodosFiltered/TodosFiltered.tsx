@@ -7,7 +7,7 @@ interface Props extends GlobalProps {
 
 }
 
-const todosFiltered = (props: Props) => {
+const TodosFiltered:React.FC<Props> = (props: Props) => {
     const store = props.store!.todo;
 
     return (
@@ -31,4 +31,4 @@ const todosFiltered = (props: Props) => {
     );
 };
 
-export default inject('store')(observer(todosFiltered));
+export default inject('store')(observer(TodosFiltered));

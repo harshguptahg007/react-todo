@@ -5,7 +5,7 @@ import {inject, observer} from "mobx-react";
 interface Props extends GlobalProps {
 }
 
-const todoCheckAll = (props: Props) => {
+const TodoCheckAll: React.FC<Props> = (props: Props) => {
     const store = props.store!.todo;
     return (
         <div>
@@ -20,4 +20,4 @@ const todoCheckAll = (props: Props) => {
     );
 };
 
-export default inject('store')(observer(todoCheckAll));
+export default inject('store')(observer(TodoCheckAll));

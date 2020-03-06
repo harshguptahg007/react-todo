@@ -1,7 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="a6bc1b81-2434-4240-adf1-d2b8eadcee10" name="Default Changelist" comment="" />
+    <list default="true" id="a6bc1b81-2434-4240-adf1-d2b8eadcee10" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/App.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/App.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/TodoCheckAll.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/TodoCheckAll.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/TodoClearCompleted.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/TodoClearCompleted.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/TodoInput/TodoInput.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/TodoInput/TodoInput.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/TodoItem/TodoItem.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/TodoItem/TodoItem.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/TodoList.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/TodoList.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/TodoRemaining.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/TodoRemaining.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/TodosFiltered/TodosFiltered.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/TodosFiltered/TodosFiltered.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/firebase.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/model/TodoModel.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/model/TodoModel.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/stores/TodoStore.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/stores/TodoStore.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tsconfig.json" beforeDir="false" afterPath="$PROJECT_DIR$/tsconfig.json" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -79,6 +94,7 @@
       <workItem from="1583392840864" duration="1070000" />
       <workItem from="1583394028141" duration="102000" />
       <workItem from="1583394341494" duration="2864000" />
+      <workItem from="1583474725341" duration="3146000" />
     </task>
     <servers />
   </component>
